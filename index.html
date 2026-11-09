@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Rorisang Lu: African luxury fashion. Sculptural silhouettes and statement accessories from Gaborone, Botswana.">
+<title>Rorisang Lu Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<!-- Icon sprites used by the product silhouettes and the nav icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="s-hat" viewBox="0 0 120 100"><path d="M22 66Q20 26 62 24Q100 26 98 66Z" fill="currentColor"/><ellipse cx="60" cy="68" rx="56" ry="9" fill="currentColor"/></symbol>
+  <symbol id="s-bag" viewBox="0 0 120 110"><path d="M20 46h80l8 54H12z" fill="currentColor"/><path d="M42 46V34a18 18 0 0 1 36 0v12" fill="none" stroke="currentColor" stroke-width="6"/></symbol>
+  <symbol id="s-handbag" viewBox="0 0 120 110"><path d="M16 50h88l-8 50H24z" fill="currentColor"/><path d="M34 50C34 14 86 14 86 50" fill="none" stroke="currentColor" stroke-width="5"/></symbol>
+  <symbol id="s-dress" viewBox="0 0 120 150"><path d="M46 8h28l-3 36 30 100H19l30-100z" fill="currentColor"/></symbol>
+  <symbol id="s-gown" viewBox="0 0 120 170"><path d="M47 6h26l-3 38 34 120H16l34-120z" fill="currentColor"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+</svg>
+
+<!-- Storefront: announcement bar, header, home sections, footer -->
+<div class="bar" id="bar">Free delivery in Gaborone on orders over P2,500 <a id="adminBar" href="#admin" hidden style="margin-left:14px;text-decoration:underline;color:#e58aa6">Manage catalogue</a></div>
+<header>
+  <div class="gutter">
+    <div class="nav">
+      <button class="ib menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <nav class="links" aria-label="Main"><a href="#shop" data-cat="All">Shop</a><a href="#shop" data-cat="Womenswear">Womenswear</a><a href="#shop" data-cat="Bags">Bags</a><a href="#shop" data-cat="Hats">Hats</a></nav>
+      <a class="logo" href="#top" id="logo">Rorisang Lu</a>
+      <div class="icons">
+        <button class="ib" id="wishBtn" aria-label="Wishlist"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg><span class="count" id="wishCount" hidden>0</span></button>
+        <button class="ib" id="bagBtn" aria-label="Open bag"><svg viewBox="0 0 24 24"><use href="#i-bag"/></svg><span class="count" id="bagCount" hidden>0</span></button>
+      </div>
+    </div>
+    <div class="mobile-links" id="mobileLinks"><a href="#shop" data-cat="All">Shop all</a><a href="#shop" data-cat="Womenswear">Womenswear</a><a href="#shop" data-cat="Bags">Bags</a><a href="#shop" data-cat="Hats">Hats</a><a href="#story">Events</a></div>
+  </div>
+</header>
+
+<main id="storefront">
+  <section class="hero" id="top">
+    <svg class="fig" viewBox="0 0 120 170" aria-hidden="true"><use href="#s-gown"/></svg>
+    <div class="gutter"><div class="copy">
+      <span class="caps">African luxury fashion</span>
+      <h1 class="display">A little scandal,<br><em>a lot of style.</em></h1>
+      <p>Sculptural silhouettes and statement accessories for women who were never meant to disappear into the room.</p>
+      <a class="btn light" href="#shop" data-cat="All">Shop the collection</a>
+    </div></div>
+  </section>
+
+  <section class="gutter cats" aria-label="Categories">
+    <button class="cat" data-cat="Womenswear"><span class="art"><svg viewBox="0 0 120 150"><use href="#s-dress"/></svg></span><span class="label">Womenswear</span></button>
+    <button class="cat" data-cat="Bags"><span class="art"><svg viewBox="0 0 120 110"><use href="#s-bag"/></svg></span><span class="label">Bags</span></button>
+    <button class="cat" data-cat="Hats"><span class="art"><svg viewBox="0 0 120 100"><use href="#s-hat"/></svg></span><span class="label">Hats</span></button>
+  </section>
+
+  <section id="shop" class="gutter">
+    <div class="section-head"><h2 class="display">The collection</h2><span class="showing" id="showing"></span></div>
+    <div class="toolbar">
+      <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+      <label class="showing" for="sort">Sort <select id="sort"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="img" aria-hidden="true"><svg viewBox="0 0 120 170"><use href="#s-dress"/></svg></div>
+    <div class="txt">
+      <span class="caps muted">Botswana at 60</span>
+      <h2 class="display">Entrusted with representing the future.</h2>
+      <p>For Botswana's 60th Independence celebrations, the showcase traced the country's fashion story through the decades. Rorisang Lu took the runway for what comes next.</p>
+      <div><a class="btn ghost" href="https://rorisangluxury.com/events/" target="_blank" rel="noopener">See events</a></div>
+    </div>
+  </section>
+
+  <section class="gutter trust">
+    <div><b>Pay your way</b><span>Card, bank transfer, Orange Money</span></div>
+    <div><b>Flexible plans</b><span>Split a piece into three payments</span></div>
+    <div><b>Delivery</b><span>Gaborone courier, nationwide and abroad</span></div>
+    <div><b>Made with care</b><span>Limited runs, finished by hand</span></div>
+  </section>
+
+  <section class="gutter" style="max-width:900px;margin:0 auto;padding-bottom:8px">
+    <h2 class="display" style="font-weight:400;font-size:30px;margin:8px 0 16px">Before you order</h2>
+    <details class="faq"><summary>How do I order?</summary><p>Add pieces to your bag, check out, and choose how you want to pay. We confirm your order by email and WhatsApp.</p></details>
+    <details class="faq"><summary>Can I pay in instalments?</summary><p>Yes. The flexible plan splits the total into three equal payments: today, in 30 days and in 60 days. Your order ships after the final payment.</p></details>
+    <details class="faq"><summary>How long does delivery take?</summary><p>Ready-to-wear pieces ship within 3 to 5 working days. Made-to-measure pieces take longer and we confirm the date before you pay.</p></details>
+    <details class="faq"><summary>What is your returns policy?</summary><p>See Brand Policies and Service Guidelines on the current site. This line is a placeholder until the policy is moved across.</p></details>
+  </section>
+</main>
+
+<!-- Checkout and admin views are filled in by js/app.js -->
+<main id="checkoutView" hidden></main>
+<main id="adminView" hidden></main>
+
+<footer>
+  <div class="gutter"><div class="cols">
+    <div><a class="logo" href="#top">Rorisang Lu</a><small>African luxury fashion, Gaborone, Botswana</small></div>
+    <div><span class="caps">Contact</span><br>WhatsApp: add number<br>Email: add address</div>
+    <div><span class="caps">Follow</span><br>Instagram: add handle</div>
+    <div id="adminLink" hidden><span class="caps">Owner</span><br><a href="#admin">Manage catalogue</a></div>
+  </div></div>
+</footer>
+
+<div id="overlay"></div>
+<div id="toast" class="toast" hidden></div>
+
+
+<!-- demo-store.js must load first: it provides browser-only storage for the demo -->
+<script src="js/demo-store.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
