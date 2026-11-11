@@ -1,0 +1,70 @@
+# Nightly database backup for the Rorisang Lu store.
+#
+# IMPORTANT: copy this file into a PRIVATE repository, at
+#   .github/workflows/backup.yml
+# Do not run it from the public store repository. Backups contain customer
+# data, and public repositories also have their scheduled workflows switched
+# off after 60 days without activity.
+#
+# Needed in the private repo (Settings -> Secrets and variables -> Actions):
+#   SUPABASE_DB_URL   the Supabase "Session pooler" connection string, with the
+#                     database password filled in
+#
+# Each run dumps the database to backups/db-YYYY-MM-DD.sql.gz, keeps the latest
+# 30 files and commits them. The daily connection also counts as activity, which
+# helps stop a free Supabase project from pausing after a week of inactivity.
+
+name: Nightly database backup
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # 22:00 UTC, which is midnight in Gaborone
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write           # needed to commit the backup file
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the backup repository
+        uses: actions/checkout@v4
+
+      - name: Install the PostgreSQL client
+        # pg_dump must be the same version as, or newer than, the Supabase
+        # database. Change 17 if your project runs a newer major version.
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc > /dev/null
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: Dump the database
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          set -euo pipefail
+          mkdir -p backups
+          STAMP=$(date -u +%Y-%m-%d)
+          pg_dump "$SUPABASE_DB_URL" --no-owner --no-privileges --schema=public \
+            | gzip > "backups/db-$STAMP.sql.gz"
+          # A real dump is never tiny. Fail loudly if it is.
+          SIZE=$(stat -c%s "backups/db-$STAMP.sql.gz")
+          if [ "$SIZE" -lt 1000 ]; then
+            echo "Backup file is only $SIZE bytes, something went wrong."
+            exit 1
+          fi
+          echo "Backup written ($SIZE bytes)."
+
+      - name: Keep the latest 30 backups
+        run: |
+          ls -1t backups/db-*.sql.gz | tail -n +31 | xargs -r rm --
+
+      - name: Commit the backup
+        run: |
+          git config user.name "backup-bot"
+          git config user.email "backup-bot@users.noreply.github.com"
+          git add backups
+          git diff --cached --quiet || git commit -m "Database backup $(date -u +%Y-%m-%d)"
+          git push
